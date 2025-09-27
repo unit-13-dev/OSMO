@@ -222,9 +222,9 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
             <li>
               <Link
-                href="/start"
+                href="/discover"
                 className={`flex items-center py-3 px-4 rounded-lg text-base ${
-                  pathname === "/start"
+                  pathname === "/discover"
                     ? "bg-[#7A7FEE]/10 text-[#7A7FEE]"
                     : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}

@@ -10,8 +10,8 @@ interface ContactFormButtonProps {
 
 export default function ContactFormButton({ className = "", children }: ContactFormButtonProps) {
   return (
-    <Link href="/start" className={className || "btn-primary"}>
-      {children || "Schedule Discovery Call"}
+    <Link href="/create" className={className || "btn-primary"}>
+      {children || "Create Your DTF"}
     </Link>
   )
 }

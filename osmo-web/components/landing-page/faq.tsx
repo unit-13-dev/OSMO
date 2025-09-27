@@ -6,39 +6,39 @@ import { ChevronDown } from "lucide-react"
 const faqs = [
   {
     id: 1,
-    question: "What can I expect when we work together?",
+    question: "What is a Decentralized Token Fund (DTF)?",
     answer:
-      "We start with a discovery call to understand your needs, then provide a detailed proposal with timeline and cost estimates. Once approved, we begin development with regular updates and feedback sessions.",
+      "A DTF is a smart contract-based investment fund that automatically manages a diversified portfolio of tokens. It allows you to invest in multiple cryptocurrencies with a single transaction and automatic rebalancing.",
   },
   {
     id: 2,
-    question: "How long do projects take to build?",
+    question: "How do I create my own DTF?",
     answer:
-      "Project timelines vary based on complexity. Simple websites might take 2-4 weeks, while complex platforms can take 3-6 months. We provide detailed timelines during the proposal phase.",
+      "Creating a DTF is simple! Connect your wallet, choose your tokens, set allocation percentages, and deploy your fund. The entire process takes just a few minutes with our intuitive interface.",
   },
   {
     id: 3,
-    question: "What tools do you use to build?",
+    question: "What tokens can I include in my DTF?",
     answer:
-      "We use modern frameworks like React, Next.js, and Node.js, along with AI tools and cloud services. Our stack is tailored to each project's specific requirements.",
+      "You can include any ERC-20 tokens that are available on the platform. We support major DeFi tokens, stablecoins, and emerging projects. Our search functionality helps you find the tokens you want.",
   },
   {
     id: 4,
-    question: "How much does a typical project cost?",
+    question: "Are there any fees for using OSMO?",
     answer:
-      "Project costs vary widely based on requirements. Simple websites start around $5,000, while complex platforms can range from $25,000 to $100,000+. We provide detailed quotes after our discovery process.",
+      "OSMO charges minimal platform fees for DTF creation and management. You'll also pay standard blockchain gas fees for transactions. All fees are transparent and displayed before you confirm any action.",
   },
   {
     id: 5,
-    question: "How do you manage payments?",
+    question: "How do I track my DTF's performance?",
     answer:
-      "We typically work with a 50% upfront deposit and the remaining 50% upon project completion. For larger projects, we may establish milestone-based payment schedules.",
+      "Our dashboard provides real-time performance metrics, including total value, individual token performance, and historical charts. You can monitor your DTF's growth and make informed decisions.",
   },
   {
     id: 6,
-    question: "Can you manage my app's technical support with users?",
+    question: "Can I modify my DTF after creation?",
     answer:
-      "Yes, we offer ongoing technical support and maintenance packages. These can include user support, bug fixes, feature updates, and performance monitoring.",
+      "Yes! You can rebalance your DTF by adjusting token allocations, adding new tokens, or removing existing ones. Changes are executed through smart contracts for transparency and security.",
   },
 ]
 
@@ -57,8 +57,8 @@ export default function Faq() {
           <span className="block text-[#7A7FEE] dark:text-[#7A7FEE]">Questions</span>
         </h2>
         <p className="mb-8 max-w-2xl text-gray-700 dark:text-gray-300">
-          Have questions about our services? Find answers to the most common questions and learn how our team can
-          enhance your creative process.
+          Have questions about DTFs and how OSMO works? Find answers to the most common questions and learn how to 
+          get started with Decentralized Token Funds.
         </p>
 
         <div className="space-y-4">

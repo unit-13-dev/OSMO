@@ -97,9 +97,9 @@ export default function Header() {
                 <ul className="flex space-x-6">
                 <li>
                     <Link
-                      href="/start"
+                      href="/discover"
                       className={`transition-colors ${
-                        pathname === "/start"
+                        pathname === "/discover"
                           ? "text-[#7A7FEE] dark:text-[#7A7FEE]"
                           : "text-black dark:text-white hover:text-[#7A7FEE] dark:hover:text-[#7A7FEE]"
                       }`}
@@ -109,9 +109,9 @@ export default function Header() {
                   </li>
                   <li>
                     <Link
-                      href="/start"
+                      href="/create"
                       className={`transition-colors ${
-                        pathname === "/start"
+                        pathname === "/create"
                           ? "text-[#7A7FEE] dark:text-[#7A7FEE]"
                           : "text-black dark:text-white hover:text-[#7A7FEE] dark:hover:text-[#7A7FEE]"
                       }`}

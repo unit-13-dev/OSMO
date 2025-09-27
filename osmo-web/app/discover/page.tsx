@@ -7,7 +7,7 @@ export const metadata = {
   description: "Discover and explore Decentralized Token Funds on OSMO platform.",
 }
 
-export default function StartPage() {
+export default function DiscoverPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#111111]">
       <Header />

@@ -29,7 +29,7 @@ export default function PortfolioMasonryGridFinal({ items }: PortfolioGridProps)
             className="card overflow-hidden rounded-3xl bg-white dark:bg-[#272829] border border-gray-200 dark:border-gray-800 transition-all duration-300 hover:shadow-lg h-full cursor-pointer"
             onClick={() => openProjectPopup(item)}
           >
-            <div className="block h-full flex flex-col">
+            <div className=" h-full flex flex-col">
               <div className="relative overflow-hidden">
                 <Image
                   src={item.mainImage || "/placeholder.svg?height=600&width=800&query=project"}

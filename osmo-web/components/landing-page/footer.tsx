@@ -22,23 +22,27 @@ export default function Footer() {
       <div className="flex flex-col items-center text-center">
         <Link href="/" className="flex items-center justify-center mb-4">
           {mounted ? (
+            <div className="text-2xl font-bold flex items-center gap-3 text-black dark:text-white">
             <Image
-              src={logoSrc || "/placeholder.svg"}
-              alt="Automatic Logo"
+              src={"/mainlogo.png"}
+              alt="OSMO Logo"
               width={200}
               height={50}
               className="h-12 w-auto"
+              priority
             />
+            OSMO
+          </div>
           ) : (
             <div className="h-12 w-[200px]" />
           )}
         </Link>
         <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-8">
-          Your AI-first development partner building high-quality, scalable platforms.
+          Decentrelised Token Folios
         </p>
 
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          © {new Date().getFullYear()} Automatic. All rights reserved.
+          © {new Date().getFullYear()} OSMO. All rights reserved.
         </p>
       </div>
     </footer>

@@ -1,15 +1,19 @@
-import PortfolioPage from "@/components/portfolio/portfolio-page"
-import { fetchPortfolioData } from "@/utils/csv-parser"
+import Header from "@/components/landing-page/header"
+import DTFPortfolio from "@/components/dtf/portfolio"
+import Footer from "@/components/landing-page/footer"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Portfolio | Automatic",
-  description:
-    "Explore our latest projects and case studies. From AI-driven automation to custom marketplaces, our work helps businesses scale smarter.",
+  title: "DTF Portfolio | OSMO",
+  description: "View and manage your Decentralized Token Fund portfolio on OSMO platform.",
 }
 
-export default async function Portfolio() {
-  const portfolioData = await fetchPortfolioData()
-
-  return <PortfolioPage initialData={portfolioData} />
+export default function Portfolio() {
+  return (
+    <main className="min-h-screen bg-white dark:bg-[#111111]">
+      <Header />
+      <DTFPortfolio />
+      <Footer />
+    </main>
+  )
 }
