@@ -1,17 +1,18 @@
 import Header from "@/components/landing-page/header"
-import DTFDashboard from "@/components/dtf/dashboard"
 import Footer from "@/components/landing-page/footer"
+import PortfolioDiscovery from "@/components/dtf/portfolio-discovery"
+import type { Metadata } from "next"
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Discover DTFs | OSMO",
-  description: "Discover and explore Decentralized Token Funds on OSMO platform.",
+  description: "Discover and compare Decentralized Token Funds on the OSMO platform. Browse, filter, and analyze DTF portfolios.",
 }
 
-export default function DiscoverPage() {
+export default function Discover() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#111111]">
       <Header />
-      <DTFDashboard />
+      <PortfolioDiscovery />
       <Footer />
     </main>
   )

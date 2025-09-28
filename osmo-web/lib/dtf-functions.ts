@@ -400,27 +400,15 @@ export const dtfFunctions = {
 
       const weiAmount = formatEthToWei(ethAmount);
       
-      // Calculate fee manually since getMintPreview is not in ABI
-      const fee = calculateFees(weiAmount, DTF_CONSTANTS.MINT_FEE_BPS);
-      const investedAmount = weiAmount - fee;
+      // Use the smart contract function for accurate preview
+      const [dtfTokens, fee] = await readContract(config, {
+        address: dtfAddress as `0x${string}`,
+        abi: DTF_ABI,
+        functionName: 'getMintPreview',
+        args: [weiAmount, BigInt(slippageBps)],
+      }) as [bigint, bigint];
 
-      // Get current portfolio value to calculate DTF tokens
-      const currentPortfolioValue = await dtfContract.dtf.getCurrentPortfolioValue(dtfAddress);
-      
-      let dtfTokens: bigint;
-      if (currentPortfolioValue === BigInt(0)) {
-        // First mint: 1 ETH = 1 DTF
-        dtfTokens = investedAmount;
-      } else {
-        // DTF tokens to mint = (ETH invested * current total supply) / current portfolio value
-        const totalSupply = await readContract(config, {
-          address: dtfAddress as `0x${string}`,
-          abi: DTF_ABI,
-          functionName: 'totalSupply',
-        }) as bigint;
-        
-        dtfTokens = (investedAmount * totalSupply) / currentPortfolioValue;
-      }
+      const investedAmount = weiAmount - fee;
 
       return {
         dtfTokens,

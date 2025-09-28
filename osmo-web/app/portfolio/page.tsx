@@ -1,6 +1,7 @@
 import Header from "@/components/landing-page/header"
 import DTFPortfolio from "@/components/dtf/portfolio"
 import Footer from "@/components/landing-page/footer"
+import { redirect } from "next/navigation"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -9,11 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default function Portfolio() {
-  return (
-    <main className="min-h-screen bg-white dark:bg-[#111111]">
-      <Header />
-      <DTFPortfolio />
-      <Footer />
-    </main>
-  )
+  // Redirect to discover page if no DTF address provided
+  // This allows users to select a DTF from the discovery page
+  redirect('/discover')
 }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { makeRateLimitedRequest } from '@/lib/api-rate-limiter';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,25 +13,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Try to get token metadata from CoinGecko
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/ethereum/contract/${address}`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'OSMO-DTF-Platform/1.0'
-        }
-      }
+    // Try to get token metadata from CoinGecko (with rate limiting)
+    const data = await makeRateLimitedRequest<any>(
+      `https://api.coingecko.com/api/v3/coins/ethereum/contract/${address}`
     );
-    
-    if (!response.ok) {
-      return NextResponse.json(
-        { token: null },
-        { status: 200 }
-      );
-    }
-    
-    const data = await response.json();
     
     const token = {
       address: address,

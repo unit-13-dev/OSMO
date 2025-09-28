@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { makeRateLimitedRequest } from '@/lib/api-rate-limiter';
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,22 +14,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // First, search for coins
-    const searchResponse = await fetch(
-      `https://api.coingecko.com/api/v3/search?query=${encodeURIComponent(query)}`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'OSMO-DTF-Platform/1.0'
-        }
-      }
+    // First, search for coins (with rate limiting)
+    const searchData = await makeRateLimitedRequest<any>(
+      `https://api.coingecko.com/api/v3/search?query=${encodeURIComponent(query)}`
     );
-
-    if (!searchResponse.ok) {
-      throw new Error(`CoinGecko search API error: ${searchResponse.status}`);
-    }
-
-    const searchData = await searchResponse.json();
     
     // Get detailed info for each coin to get contract addresses
     const tokensWithAddresses = await Promise.all(
