@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { makeRateLimitedRequest } from '@/lib/api-rate-limiter';
 import { 
   getEthereumAddress, 
   getTokenMapping, 
@@ -53,26 +54,10 @@ export async function POST(request: NextRequest) {
     // Create comma-separated string of Ethereum addresses for batch request
     const addressString = ethereumAddresses.join(',');
     
-    // Fetch token metadata from CoinGecko using Ethereum mainnet addresses
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${addressString}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'OSMO-DTF-Platform/1.0'
-        }
-      }
+    // Fetch token metadata from CoinGecko using Ethereum mainnet addresses (with rate limiting)
+    const priceData = await makeRateLimitedRequest<Record<string, any>>(
+      `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${addressString}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true`
     );
-    
-    if (!response.ok) {
-      console.error('CoinGecko API error:', response.status, response.statusText);
-      return NextResponse.json(
-        { tokens: [], error: 'Failed to fetch token data from CoinGecko' },
-        { status: 200 }
-      );
-    }
-    
-    const priceData = await response.json();
     
     // Fetch detailed metadata for each Unichain address
     const tokenMetadataPromises = limitedAddresses.map(async (unichainAddress: string) => {
@@ -98,36 +83,10 @@ export async function POST(request: NextRequest) {
           } as TokenMetadata;
         }
         
-        // Get detailed token info using Ethereum address
-        const detailResponse = await fetch(
-          `https://api.coingecko.com/api/v3/coins/ethereum/contract/${ethereumAddress}`,
-          {
-            headers: {
-              'Accept': 'application/json',
-              'User-Agent': 'OSMO-DTF-Platform/1.0'
-            }
-          }
+        // Get detailed token info using Ethereum address (with rate limiting)
+        const detailData = await makeRateLimitedRequest<any>(
+          `https://api.coingecko.com/api/v3/coins/ethereum/contract/${ethereumAddress}`
         );
-        
-        if (!detailResponse.ok) {
-          // Return basic info with mapping data if detailed fetch fails
-          const priceInfo = priceData[ethereumAddress.toLowerCase()];
-          return {
-            address: unichainAddress, // Return Unichain address
-            symbol: mapping.symbol,
-            name: mapping.name,
-            decimals: 18,
-            isVerified: true,
-            isTestnet: true,
-            price: priceInfo?.usd || null,
-            marketCap: priceInfo?.usd_market_cap || null,
-            volume24h: priceInfo?.usd_24h_vol || null,
-            priceChange24h: priceInfo?.usd_24h_change || null,
-            description: `${mapping.name} on Unichain Sepolia`
-          } as TokenMetadata;
-        }
-        
-        const detailData = await detailResponse.json();
         const priceInfo = priceData[ethereumAddress.toLowerCase()];
         
         return {

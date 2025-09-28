@@ -1,25 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { makeRateLimitedRequest } from '@/lib/api-rate-limiter';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const limit = searchParams.get('limit') || '8';
     
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false&locale=en`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'OSMO-DTF-Platform/1.0'
-        }
-      }
+    const data = await makeRateLimitedRequest<any[]>(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false&locale=en`
     );
-
-    if (!response.ok) {
-      throw new Error(`CoinGecko API error: ${response.status}`);
-    }
-
-    const data = await response.json();
     
     // Filter for EVM-compatible tokens with actual contract addresses
     const validTokens = data

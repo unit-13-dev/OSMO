@@ -36,8 +36,10 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { dtfContract, DTFData, PortfolioData, DTFError, formatWeiToEth, calculateFees, } from '@/lib/dtf-functions';
+import { getBatchTokenMetadata } from '@/lib/token-metadata-cache';
 import { DTF_CONSTANTS } from '@/config/contracts';
 import { useToast } from '@/hooks/use-toast';
+import PortfolioErrorHandler from './portfolio-error-handler';
 
 interface PortfolioProps {
   dtfAddress?: string;
@@ -108,28 +110,22 @@ export default function Portfolio({ dtfAddress: propDtfAddress }: PortfolioProps
     }
   }, [searchParams, propDtfAddress]);
 
-  // Function to fetch token metadata from CoinGecko
+  // Validate DTF address format
+  const isValidDTFAddress = (address: string): boolean => {
+    return /^0x[a-fA-F0-9]{40}$/.test(address);
+  };
+
+  // Function to fetch token metadata using centralized cache
   const fetchTokenMetadata = useCallback(async (addresses: string[]): Promise<Record<string, any>> => {
     try {
       setMetadataLoading(true);
       
-      const response = await fetch('/api/tokens/batch-metadata', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ addresses }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch token metadata');
-      }
-
-      const data = await response.json();
+      // Use the centralized token metadata cache
+      const tokens = await getBatchTokenMetadata(addresses);
       
       // Convert array to object keyed by address for easy lookup
       const metadataMap: Record<string, any> = {};
-      data.tokens.forEach((token: any) => {
+      tokens.forEach((token) => {
         metadataMap[token.address.toLowerCase()] = token;
       });
 
@@ -143,7 +139,17 @@ export default function Portfolio({ dtfAddress: propDtfAddress }: PortfolioProps
   }, []);
 
   const fetchPortfolioData = useCallback(async () => {
-    if (!dtfAddress) return;
+    if (!dtfAddress) {
+      setError('No DTF address provided');
+      setLoading(false);
+      return;
+    }
+
+    if (!isValidDTFAddress(dtfAddress)) {
+      setError('Invalid DTF address format');
+      setLoading(false);
+      return;
+    }
 
     try {
       setError(null);
@@ -263,6 +269,8 @@ export default function Portfolio({ dtfAddress: propDtfAddress }: PortfolioProps
       console.error('Error fetching portfolio data:', err);
       if (err instanceof DTFError) {
         setError(err.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError('Failed to load portfolio data');
       }
@@ -270,7 +278,7 @@ export default function Portfolio({ dtfAddress: propDtfAddress }: PortfolioProps
       setLoading(false);
       setRefreshing(false);
     }
-  }, [dtfAddress, isConnected, address, fetchTokenMetadata]);
+  }, [dtfAddress, isConnected, address, fetchTokenMetadata, isValidDTFAddress]);
 
   const calculateSecurityScore = (tokens: TokenData[], info: DTFData): SecurityScore => {
     // Diversification score (more tokens = better)
@@ -345,22 +353,12 @@ export default function Portfolio({ dtfAddress: propDtfAddress }: PortfolioProps
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <Alert variant="destructive">
-          <AlertDescription className="flex items-center justify-between">
-            <span>{error}</span>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleRefresh}
-              disabled={refreshing}
-            >
-              <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              Retry
-            </Button>
-          </AlertDescription>
-        </Alert>
-      </div>
+      <PortfolioErrorHandler
+        error={error}
+        dtfAddress={dtfAddress}
+        onRetry={handleRefresh}
+        retryLoading={refreshing}
+      />
     );
   }
 

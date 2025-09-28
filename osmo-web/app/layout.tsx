@@ -7,6 +7,8 @@ import "@/components/landing-page/styles.css";
 import { Suspense } from "react";
 import "./globals.css";
 import ContextProvider from "@/context/WalletContext";
+import { DTFProvider } from "@/context/DTFContext";
+import APIMonitor from "@/components/debug/api-monitor";
 import { headers } from "next/headers";
 
 const outfit = Outfit({
@@ -44,16 +46,19 @@ export default function RootLayout({
       <body className={`${plusJakartaSans.className}`}>
         <Suspense fallback={null}>
           <ContextProvider cookies={cookies}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
+            <DTFProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+              </ThemeProvider>
+            </DTFProvider>
           </ContextProvider>
           <Analytics />
+          {/* <APIMonitor /> */}
         </Suspense>
       </body>
     </html>
