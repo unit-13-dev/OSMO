@@ -651,7 +651,6 @@ export const realTimeFunctions = {
   }
 };
 
-// Export all functions
 export const dtfContract = {
   factory: factoryFunctions,
   dtf: dtfFunctions,

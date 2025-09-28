@@ -640,12 +640,12 @@ export default function Portfolio({ dtfAddress: propDtfAddress }: PortfolioProps
                               {token.name}
                             </p>
                             {token.symbol && token.symbol !== 'UNKNOWN' && (
-                              <Badge variant="outline" className="text-xs">
+                              <Badge className="text-xs">
                                 {token.symbol}
                               </Badge>
                             )}
                             {token.isVerified && (
-                              <Badge variant="default" className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                              <Badge className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                 Verified
                               </Badge>
                             )}
